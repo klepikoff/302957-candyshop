@@ -1,6 +1,5 @@
 'use strict';
-
-//1
+//3.1.1
 var NAMES = ['Чесночные сливки', 'Огуречный педант', 'Молочная хрюша', 'Грибной шейк', 'Баклажановое безумие', 'Паприколу итальяно', 'Нинзя-удар васаби',
 'Хитрый баклажан', 'Горчичный вызов','Кедровая липучка', 'Корманный портвейн', 'Чилийский задира', 'Беконовый взрыв', 'Арахис vs виноград',
 'Сельдерейная душа', 'Початок в бутылке', 'Чернющий мистер чеснок', 'Раша федераша', 'Кислая мина', 'Кукурузное утро', 'Икорный фуршет',
@@ -19,6 +18,7 @@ var BOOLEANS = [true, false];
 
 var RATINGS = ['stars__rating--one', 'stars__rating--two', 'stars__rating--three', 'stars__rating--four', 'stars__rating--five'];
 
+// случайное целое
 function getRandomNumber(min, max) {
     return Math.round(Math.random() * (max - min) + min);
 };
@@ -30,6 +30,15 @@ function getRandomContent(arr){
     randomContent += ', ' + arr[getRandomNumber(0, arr.length - 1)]
   }
   return randomContent;
+}
+
+// подъем на несколько родителей
+function gt(node, indx) {
+    var parent;
+    for (var i = 0; i <= indx; i++) {
+        node = node.parentNode;
+    }
+    return(node);
 }
 
 var createArr = function(quantity, arr){
@@ -54,15 +63,13 @@ var createArr = function(quantity, arr){
     return arr;
 }
 
-var goods = [];
+var goods = []; //
 
-var goodsQuantity = 26;
+var goodsQuantity = 6; //
 
-createArr(goodsQuantity, goods);
+createArr(goodsQuantity, goods); //
 
-console.log(goods);
-
-//2
+//3.1.2 
 var catalogCards = document.querySelector('.catalog__cards');
 catalogCards.classList.remove('catalog__cards--load');
 
@@ -118,36 +125,114 @@ for (var i = 0; i < goodsQuantity; i++){
 }
 catalogCards.appendChild(fragment);
 
-//3
-var basketCards = document.querySelector('.goods__cards');
 
-basketCards.classList.remove('goods__cards--empty'); 
-document.querySelector('.goods__card-empty').classList.add('visually-hidden');
+//3.1.3 корзина (решение удалено, см. соответствующие коммиты)
+
+var basketCards = document.querySelector('.goods__cards');
 
 var basketTemplate = document.querySelector('#card-order').content.querySelector('.card-order');
 
-console.log(basketTemplate);    
+//4.1.1 избранное
+var buttonFavorite = document.querySelectorAll('.card__btn-favorite');
+for(var i = 0; i < buttonFavorite.length; i++){
+    buttonFavorite[i].addEventListener('click', function() {
+        this.classList.toggle('card__btn-favorite--selected');
+    });
+}
 
-var basketQuantity = 3;
-
+//4.1.2 добавление в корзину
+var buttonAdd = document.querySelectorAll('.card__btn');
+var basketContainer = document.querySelector('.goods__cards');
 var basketGoods = [];
-
-createArr(basketQuantity, basketGoods);
-
-console.log(basketGoods);
 
 var newFragment = document.createDocumentFragment();
 
-var renderBasket = function(basketGoods){
-    var basketElement = basketTemplate.cloneNode(true);
-    basketElement.querySelector('.card-order__title').textContent = basketGoods.name;
-    basketElement.querySelector('.card-order__price').textContent = basketGoods.price + ' ₽';
+for(var i = 0; i < buttonAdd.length; i++){
 
-    return(basketElement);
-}
+    buttonAdd[i].addEventListener('click', function() { // ставим обработчики
 
-for (var i = 0; i < basketQuantity; i++){
-    newFragment.appendChild(renderBasket(basketGoods[i]));
-}   
+        // убираем заглушку
+        basketCards.classList.remove('goods__cards--empty'); 
+        document.querySelector('.goods__card-empty').classList.add('visually-hidden');
 
-basketCards.appendChild(newFragment);
+        //добавляем цифру в шапке
+        document.querySelector('.main-header__basket').textContent = 'В корзине ' + basketGoods.length + ' шт. товаров';
+
+        var thisCard = gt(this, 2);
+        
+        var basketGood = {
+            name: thisCard.querySelector('.card__title').textContent,
+            picture: thisCard.querySelector('.card__img').src,
+            price: thisCard.querySelector('.card__price').textContent,
+            orderedAmount: 1 //количество товара                     
+        }
+        function testArr(arr, smth){ //проверка на похожесть товара на витрине и в корзине
+            for(var j = 0; j < arr.length; j++){
+                if(smth.name === arr[j].name) {
+                    arr[j].orderedAmount += 1; 
+                    console.log(arr[j]);  
+                    console.log('raz');
+                    document.querySelectorAll('.card-order__count')[j].value = arr[j].orderedAmount;
+                    return false;
+                } 
+            }
+            return true
+        }
+
+        //console.log(testArr(basketGoods, basketGood));
+ 
+        if(testArr(basketGoods, basketGood)){
+            basketGoods.push(basketGood);
+
+        var basketElement = basketTemplate.cloneNode(true);
+        basketElement.querySelector('.card-order__title').textContent = basketGoods[basketGoods.length - 1].name;
+        basketElement.querySelector('.card-order__price').textContent = basketGoods[basketGoods.length - 1].price;
+        basketElement.querySelector('.card-order__count').value = basketGoods[basketGoods.length - 1].orderedAmount;
+
+        newFragment.appendChild(basketElement);        
+        
+        basketCards.appendChild(newFragment);
+        }
+    })
+};
+
+/* СДЕЛАТЬ!
+Ещё один момент, который нужно учесть, что в корзину должно быть невозможно добавить больше товаров, 
+чем указано в количестве товара (amount). Получается, что при добавлении и удалении товара, в списке 
+товаров нужно обновлять свойство amount у соответствующего товара. */
+
+// 4.1.3 переключение способов доставки
+var deliverStoreBtn = document.querySelector('#deliver__store'); 
+var deliverCourierBtn = document.querySelector('#deliver__courier');
+
+var deliverStoreTab = document.querySelector('.deliver__store'); 
+var deliverCourierTab = document.querySelector('.deliver__courier');
+
+deliverStoreBtn.addEventListener('click', function() {
+    deliverStoreTab.classList.remove('visually-hidden');
+    deliverCourierTab.classList.add('visually-hidden')
+})
+
+deliverCourierBtn.addEventListener('click', function() {
+    deliverStoreTab.classList.add('visually-hidden');
+    deliverCourierTab.classList.remove('visually-hidden')
+})
+
+// 4.1.4 обработчик на фильтр, первая фаза
+var rangeBtnLeft = document.querySelector('.range__btn--left');
+var rangeBtnRight = document.querySelector('.range__btn--right');
+
+var rangePriceMin = document.querySelector('.range__price--min');
+var rangePriceMax = document.querySelector('.range__price--max');
+
+rangeBtnLeft.addEventListener('mouseup', function(evt) {
+    console.log(evt.clientX);
+    console.log(evt.clientY);
+});
+
+rangeBtnRight.addEventListener('mouseup', function(evt) {
+    console.log(evt.clientX);
+    console.log(evt.clientY);
+});
+
+// нужен переключатель, координаты из которого нужно занести в rangePriceMin/max textContent
