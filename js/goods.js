@@ -5,13 +5,13 @@ var NAMES = ['Чесночные сливки', 'Огуречный педант
 'Сельдерейная душа', 'Початок в бутылке', 'Чернющий мистер чеснок', 'Раша федераша', 'Кислая мина', 'Кукурузное утро', 'Икорный фуршет',
 'Новогоднее настроение', 'С пивком потянет', 'Мисс креветка', 'Бесконечный взрыв', 'Невинные винные', 'Бельгийское пенное', 'Острый язычок'];
 
-var IMAGES = ['gum-cedar', 'gum-chile', 'gum-eggplant', 'gum-mustard', 'gum-portwine', 'gum-wasabi', 'ice-cucumber', 'ice-eggplant', 
+var IMAGES = ['gum-cedar', 'gum-chile', 'gum-eggplant', 'gum-mustard', 'gum-portwine', 'gum-wasabi', 'ice-cucumber', 'ice-eggplant',
 'ice-garlic', 'ice-italian', 'ice-mushroom', 'ice-pig', 'marmalade-beer', 'marmalade-caviar', 'marmalade-corn', 'marmalade-new-year',
 'marmalade-sour', 'marshmallow-bacon', 'marshmallow-beer', 'marshmallow-shrimp', 'marshmallow-spicy', 'marshmallow-wine', 'soda-bacon',
 'soda-celery', 'soda-cob', 'soda-garlic', 'soda-peanut-grapes', 'soda-russian'];
 
-var CONTENTS = ['молоко', 'сливки', 'вода', 'пищевой краситель', 'патока', 'ароматизатор бекона', 'ароматизатор свинца', 
-'ароматизатор дуба идентичный натуральному', 'ароматизатор картофеля', 'лимонная кислота', 'загуститель', 'эмульгатор', 
+var CONTENTS = ['молоко', 'сливки', 'вода', 'пищевой краситель', 'патока', 'ароматизатор бекона', 'ароматизатор свинца',
+'ароматизатор дуба идентичный натуральному', 'ароматизатор картофеля', 'лимонная кислота', 'загуститель', 'эмульгатор',
 'консервант: сорбат калия', 'посолочная смесь: соль, нитрит натрия', 'ксилит', 'карбамид', 'вилларибо', 'виллабаджо'];
 
 var BOOLEANS = [true, false];
@@ -69,7 +69,7 @@ var goodsQuantity = 6; //
 
 createArr(goodsQuantity, goods); //
 
-//3.1.2 
+//3.1.2
 var catalogCards = document.querySelector('.catalog__cards');
 catalogCards.classList.remove('catalog__cards--load');
 
@@ -84,8 +84,8 @@ var renderGoods = function(goods){
     var goodElement = catalogTemplate.cloneNode(true);
 
     goodElement.querySelector('.card__title').textContent = goods.name;
-   
-    if(goods.amount === 0){ 
+
+    if(goods.amount === 0){
         goodElement.classList.remove('card--in-stock');
         goodElement.classList.add('card--soon');
     } else if ((goods.amount > 0) && (goods.amount <= 5)) {
@@ -152,32 +152,32 @@ for(var i = 0; i < buttonAdd.length; i++){
     buttonAdd[i].addEventListener('click', function() { // ставим обработчики
 
         // убираем заглушку
-        basketCards.classList.remove('goods__cards--empty'); 
+        basketCards.classList.remove('goods__cards--empty');
         document.querySelector('.goods__card-empty').classList.add('visually-hidden');
 
         //добавляем цифру в шапке
         document.querySelector('.main-header__basket').textContent = 'В корзине ' + basketGoods.length + ' шт. товаров';
 
         var thisCard = gt(this, 2);
-        
-        var basketGood = {
+
+        var basketGood =   {
             name: thisCard.querySelector('.card__title').textContent,
             picture: thisCard.querySelector('.card__img').src,
             price: thisCard.querySelector('.card__price').textContent,
-            orderedAmount: 1 //количество товара                     
+            orderedAmount: 1 //количество товара
         }
         function testArr(arr, smth){ //проверка на похожесть товара на витрине и в корзине
             for(var j = 0; j < arr.length; j++){
                 if(smth.name === arr[j].name) {
-                    arr[j].orderedAmount += 1; 
+                    arr[j].orderedAmount += 1;
                     document.querySelectorAll('.card-order__count')[j].value = arr[j].orderedAmount;
                     return false;
-                } 
+                }
             }
             return true
         }
 
- 
+
         if(testArr(basketGoods, basketGood)){
             basketGoods.push(basketGood);
 
@@ -186,23 +186,23 @@ for(var i = 0; i < buttonAdd.length; i++){
         basketElement.querySelector('.card-order__price').textContent = basketGoods[basketGoods.length - 1].price;
         basketElement.querySelector('.card-order__count').value = basketGoods[basketGoods.length - 1].orderedAmount;
 
-        newFragment.appendChild(basketElement);        
-        
+        newFragment.appendChild(basketElement);
+
         basketCards.appendChild(newFragment);
         }
     })
 };
 
 /* СДЕЛАТЬ!
-Ещё один момент, который нужно учесть, что в корзину должно быть невозможно добавить больше товаров, 
-чем указано в количестве товара (amount). Получается, что при добавлении и удалении товара, в списке 
+Ещё один момент, который нужно учесть, что в корзину должно быть невозможно добавить больше товаров,
+чем указано в количестве товара (amount). Получается, что при добавлении и удалении товара, в списке
 товаров нужно обновлять свойство amount у соответствующего товара. */
 
 // 4.1.3 переключение способов доставки
-var deliverStoreBtn = document.querySelector('#deliver__store'); 
+var deliverStoreBtn = document.querySelector('#deliver__store');
 var deliverCourierBtn = document.querySelector('#deliver__courier');
 
-var deliverStoreTab = document.querySelector('.deliver__store'); 
+var deliverStoreTab = document.querySelector('.deliver__store');
 var deliverCourierTab = document.querySelector('.deliver__courier');
 
 deliverStoreBtn.addEventListener('click', function() {
@@ -247,11 +247,11 @@ rangeBtnLeft.addEventListener('mousedown', function(evt){ // левый
     };
     var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
-    
+
         var shift = { // смещение
           x: startCoords.x - moveEvt.clientX,
         };
-    
+
         startCoords = {
           x: moveEvt.clientX,
         };
@@ -266,7 +266,7 @@ rangeBtnLeft.addEventListener('mousedown', function(evt){ // левый
     };
     var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
-    
+
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
     };
@@ -283,11 +283,11 @@ rangeBtnRight.addEventListener('mousedown', function(evt){ // правый
 
     var onMouseMove = function (moveEvt) {
         moveEvt.preventDefault();
-    
+
         var shift = { // смещение
           x: startCoords.x - moveEvt.clientX,
         };
-    
+
         startCoords = {
           x: moveEvt.clientX,
         };
@@ -301,7 +301,7 @@ rangeBtnRight.addEventListener('mousedown', function(evt){ // правый
     };
     var onMouseUp = function (upEvt) {
         upEvt.preventDefault();
-    
+
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
     };
@@ -330,9 +330,9 @@ function multiplyEvenNumbers(arr){
             arr[i] *=  2;
         } else {
             arr[i] = + arr[i];
-        }    
+        }
     }
-    
+
     for (var j = 0; j < arr.length; j++) {
         if (arr[j] >= 10) {
             arr[j] = arr[j] - 9;
@@ -349,7 +349,7 @@ orderBtn.addEventListener('click', function(){
     var cardNumber = document.querySelector('#payment__card-number').value;
     var cardNumbers = cardNumber.split('');
     var cardNumbersMitliplied = multiplyEvenNumbers(cardNumbers);
-  
+
 
     var sumResult = cardNumbersMitliplied.reduce(function(sum, current) {
         return sum + current;
@@ -368,11 +368,10 @@ orderBtn.addEventListener('click', function(){
  })
 
 document.querySelector('form').addEventListener('invalid', function(){
-     modal[0].classList.remove('modal--hidden');   
+     modal[0].classList.remove('modal--hidden');
 })
 
 orderBtn.addEventListener('submit', function() {
-   // modal[0].classList.remove('modal--hidden'); 
+   // modal[0].classList.remove('modal--hidden');
     alert('aaaaa');
 });
-
