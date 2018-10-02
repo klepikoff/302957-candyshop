@@ -365,13 +365,7 @@ orderBtn.addEventListener('click', function(){
         console.log(true);
 
     }
-
-  orderBtn.onclick() = function(){
-        modal[0].classList.remove('modal--hidden');  
-        alert('dasdasd')
-       }
-
-})
+ })
 
 document.querySelector('form').addEventListener('invalid', function(){
      modal[0].classList.remove('modal--hidden');   
